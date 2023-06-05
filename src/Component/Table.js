@@ -9,29 +9,16 @@ export default function Table() {
   const { name, age, city, email } = inputdata;
   const [index, setIndex] = useState()
   const [bolin, setBolin] = useState(false)
+  const [error, setError] = useState(false)
 
   function data(e) {
     setInputdata({ ...inputdata, [e.target.name]: e.target.value })
   }
 
   function addinputdata() {
-   
-    const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (name === "") {
-      alert("Enter Name ")
-    }
-    else if (age === "") {
-      alert("Enter age ")
-    }
-    else if (city === "") {
-      alert("Enter city ")
-    }
-    else if (email === "") {
-      alert("Enter email ")
-    }
-    else if (!emailPattern.test(email)) {
-      alert('Please enter a valid email address.');
-      return;
+
+    if (name.length === 0 || age.length === 0 || city.length === 0 || email.length === 0) {
+      setError(true)
     }
     else {
       setArray([...array, { name, age, city, email }])
@@ -64,7 +51,6 @@ export default function Table() {
   return (
     <div className="a">
       <h1 id="topic">User Form</h1>
-
       <div className="b">
         <div>
           <label htmlFor="name">Name : </label>
@@ -76,6 +62,8 @@ export default function Table() {
             placeholder='Enter Name'
             onChange={data} />
         </div>
+        {error && name.length <= 0 ?
+          <p> Name can't be Empty</p> : ""}
         <div>
           <label>Age : </label>
           <input
@@ -85,6 +73,8 @@ export default function Table() {
             placeholder='Enter Age'
             onChange={data} />
         </div>
+        {error && age.length <= 0 ?
+          <p> Age can't be Empty</p> : ""}
         <div>
           <label>City : </label>
           <input
@@ -95,6 +85,8 @@ export default function Table() {
             placeholder='Enter City'
             onChange={data} />
         </div>
+        {error && city.length <= 0 ?
+          <p> city can't be Empty</p> : ""}
         <div>
           <label>E-mail : </label>
           <input
@@ -105,9 +97,11 @@ export default function Table() {
             placeholder='Enter E-mail'
             onChange={data} />
         </div>
-        <button id="btn" onClick={!bolin ? addinputdata : updateinfo}>{!bolin ? `Submit` : `Update`}</button>
-      </div>
+        {error && email.length <= 0 ?
+          <p> E-mail can't be Empty</p> : ""}
 
+        <button id="btn" onClick={!bolin ? addinputdata : updateinfo}>{!bolin ? `Submit` : `Update`} </button>
+      </div>
       <br></br>
       <div className="c">
         <table border="1" width="100%">
@@ -127,10 +121,8 @@ export default function Table() {
                       <td>{item.age}</td>
                       <td>{item.city}</td>
                       <td>{item.email}</td>
-
                       <td>
-
-                        <span className="actions" >
+                       <span className="actions" >
                           <BsFillPencilFill
                             onClick={() => updatedata(i)}></BsFillPencilFill>
                           <BsFillTrashFill className="delete-btn"
@@ -142,7 +134,6 @@ export default function Table() {
                 }
               )
             }
-
           </tbody>
         </table>
       </div>
