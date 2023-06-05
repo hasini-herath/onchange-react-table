@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useRef, useState } from "react";
 import "./Table.css"
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 
@@ -6,16 +6,19 @@ import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 export default function Table() {
 
   const [array, setArray] = useState([])
-  const [inputdata, setInputdata] = useState({ name: "", age: "", city: "", email: "" })
-  const { name, age, city, email } = inputdata;
+  const [inputdata, setInputdata] = useState({ name: "", age: "", city: "", email: "" ,image:""})
+  const { name, age, city, email ,image} = inputdata;
   const [index, setIndex] = useState()
   const [bolin, setBolin] = useState(false)
   const [errors, setError] = useState({})
- 
+  const inputRef = useRef(null);
+  
   const handleChange = (e) => {
-console.log("hi");
+   // let file = [0];
+    const file = e.target.files;
+    console.log(file);
+    setInputdata(e.target.files);
     setInputdata({ ...inputdata, [e.target.name]: e.target.value })
-
   }
 
   function handleSubmit(e) {
@@ -42,12 +45,15 @@ console.log("hi");
     } else if (!regex.test(inputdata.email)) {
       error.email = "This is not a valid email format!";
     
-    } else {
-      setArray([...array, { name, age, city, email }])
-      setInputdata({ name: "", age: "", city: "", email: "" })
+    // }  else if (inputdata.image === "") {
+    //   error.image = "Image is required!";
+    // }
+    }else {
+      setArray([...array, { name, age, city, email ,image}])
+      setInputdata({ name: "", age: "", city: "", email: "",image:"" })
     }
     return error ;
-  }
+  };
 
   function deletedata(i) {
     console.log(i, "this index row want to be delete")
@@ -119,6 +125,26 @@ console.log("hi");
             onChange={handleChange} />
           {errors.email && <p style={{color:"red"}}>{errors.email}</p>}
         </div>
+        <label>Image : </label>
+        <>
+    <div className="image-upload-container ">
+    <div className="box-decoration" >
+{/*       
+      {image ? <img src={URL.createObjectURL(image)} alt="" className="img-display-after"/> : <img src="./page.png" alt="" className="img-display-after"/>}
+      */}
+      <input  
+       //value={inputdata.image || ""}
+      className="image-upload-button"
+      id="image-upload-input"
+      type ="file" 
+      ref={inputRef} 
+      onChange={handleChange} 
+     />
+         {errors.image && <p style={{color:"red"}}>{errors.image}</p>} 
+      </div>
+    </div>
+   </>
+
         <button id="btn" onClick={!bolin ? handleSubmit : updateinfo}>{!bolin ? `Submit` : `Update`}</button>
       </div>
       <br></br>
@@ -130,6 +156,8 @@ console.log("hi");
               <td>Age</td>
               <td>City</td>
               <td>E-mail</td>
+              <td>Image</td>
+
             </tr>
             {
               array && array.map(
@@ -140,6 +168,8 @@ console.log("hi");
                       <td>{item.age}</td>
                       <td>{item.city}</td>
                       <td>{item.email}</td>
+                      <td>{item.image}</td>
+
                       <td>
                         <span className="actions" >
                           <BsFillPencilFill
