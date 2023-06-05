@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Table.css"
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 
+
 export default function Table() {
 
   const [array, setArray] = useState([])
@@ -9,7 +10,7 @@ export default function Table() {
   const { name, age, city, email } = inputdata;
   const [index, setIndex] = useState()
   const [bolin, setBolin] = useState(false)
-  const [error, setError] = useState({})
+  const [errors, setError] = useState({})
  
   const handleChange = (e) => {
 console.log("hi");
@@ -24,7 +25,7 @@ console.log("hi");
 
   function validation(inputdata) {
 
- 
+ let error ={}
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (inputdata.name === "") {
       error.name = "name is required!";
@@ -32,19 +33,20 @@ console.log("hi");
     else if (inputdata.age === "") {
       error.age = "Email is required!";
     }
-    else if (inputdata.city === "") {
+   else if (inputdata.city === "") {
       error.city = "Email is required!";
     }
-    else if (inputdata.email === "") {
+ else if (inputdata.email === "") {
       error.email = "Email is required!";
 
     } else if (!regex.test(inputdata.email)) {
       error.email = "This is not a valid email format!";
-      return;
+    
     } else {
       setArray([...array, { name, age, city, email }])
       setInputdata({ name: "", age: "", city: "", email: "" })
     }
+    return error ;
   }
 
   function deletedata(i) {
@@ -84,7 +86,7 @@ console.log("hi");
             onChange={handleChange} />
         </div>
 
-        {error?.name && <p style={{color:"red"}}>{error?.name}</p>}
+        {errors.name && <p style={{color:"red"}}>{errors.name}</p>}
         <div>
           <label>Age : </label>
           <input
@@ -94,7 +96,7 @@ console.log("hi");
             placeholder='Enter Age'
             onChange={handleChange} />
         </div>
-        {/* {error.age && <p style={{color:"red"}}>{error.age}</p>} */}
+        {errors.age && <p style={{color:"red"}}>{errors.age}</p>}
         <div>
           <label>City : </label>
           <input
@@ -105,7 +107,7 @@ console.log("hi");
             placeholder='Enter City'
             onChange={handleChange} />
         </div>
-        {/* {error.city && <p style={{color:"red"}}>{error.city}</p>} */}
+        {errors.city && <p style={{color:"red"}}>{errors.city}</p>}
         <div>
           <label>E-mail : </label>
           <input
@@ -115,7 +117,7 @@ console.log("hi");
             autoComplete='off'
             placeholder='Enter E-mail'
             onChange={handleChange} />
-          {/* {error.email && <p style={{color:"red"}}>{error.email}</p>} */}
+          {errors.email && <p style={{color:"red"}}>{errors.email}</p>}
         </div>
         <button id="btn" onClick={!bolin ? handleSubmit : updateinfo}>{!bolin ? `Submit` : `Update`}</button>
       </div>
