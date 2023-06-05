@@ -9,39 +9,31 @@ export default function Table() {
   const { name, age, city, email } = inputdata;
   const [index, setIndex] = useState()
   const [bolin, setBolin] = useState(false)
-  const [error, setError] = useState({})
- 
-  const handleChange = (e) => {
-console.log("hi");
+
+  function data(e) {
     setInputdata({ ...inputdata, [e.target.name]: e.target.value })
-
   }
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    setError(validation(inputdata))
-  }
-
-  function validation(inputdata) {
-
- 
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (inputdata.name === "") {
-      error.name = "name is required!";
+  function addinputdata() {
+   
+    const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (name === "") {
+      alert("Enter Name ")
     }
-    else if (inputdata.age === "") {
-      error.age = "Email is required!";
+    else if (age === "") {
+      alert("Enter age ")
     }
-    else if (inputdata.city === "") {
-      error.city = "Email is required!";
+    else if (city === "") {
+      alert("Enter city ")
     }
-    else if (inputdata.email === "") {
-      error.email = "Email is required!";
-
-    } else if (!regex.test(inputdata.email)) {
-      error.email = "This is not a valid email format!";
+    else if (email === "") {
+      alert("Enter email ")
+    }
+    else if (!emailPattern.test(email)) {
+      alert('Please enter a valid email address.');
       return;
-    } else {
+    }
+    else {
       setArray([...array, { name, age, city, email }])
       setInputdata({ name: "", age: "", city: "", email: "" })
     }
@@ -72,6 +64,7 @@ console.log("hi");
   return (
     <div className="a">
       <h1 id="topic">User Form</h1>
+
       <div className="b">
         <div>
           <label htmlFor="name">Name : </label>
@@ -81,10 +74,8 @@ console.log("hi");
             name='name'
             autoComplete='off'
             placeholder='Enter Name'
-            onChange={handleChange} />
+            onChange={data} />
         </div>
-
-        {error?.name && <p style={{color:"red"}}>{error?.name}</p>}
         <div>
           <label>Age : </label>
           <input
@@ -92,9 +83,8 @@ console.log("hi");
             value={inputdata.age || ""}
             name="age"
             placeholder='Enter Age'
-            onChange={handleChange} />
+            onChange={data} />
         </div>
-        {/* {error.age && <p style={{color:"red"}}>{error.age}</p>} */}
         <div>
           <label>City : </label>
           <input
@@ -103,9 +93,8 @@ console.log("hi");
             name='city'
             autoComplete='off'
             placeholder='Enter City'
-            onChange={handleChange} />
+            onChange={data} />
         </div>
-        {/* {error.city && <p style={{color:"red"}}>{error.city}</p>} */}
         <div>
           <label>E-mail : </label>
           <input
@@ -114,11 +103,11 @@ console.log("hi");
             name='email'
             autoComplete='off'
             placeholder='Enter E-mail'
-            onChange={handleChange} />
-          {/* {error.email && <p style={{color:"red"}}>{error.email}</p>} */}
+            onChange={data} />
         </div>
-        <button id="btn" onClick={!bolin ? handleSubmit : updateinfo}>{!bolin ? `Submit` : `Update`}</button>
+        <button id="btn" onClick={!bolin ? addinputdata : updateinfo}>{!bolin ? `Submit` : `Update`}</button>
       </div>
+
       <br></br>
       <div className="c">
         <table border="1" width="100%">
@@ -138,7 +127,9 @@ console.log("hi");
                       <td>{item.age}</td>
                       <td>{item.city}</td>
                       <td>{item.email}</td>
+
                       <td>
+
                         <span className="actions" >
                           <BsFillPencilFill
                             onClick={() => updatedata(i)}></BsFillPencilFill>
@@ -151,6 +142,7 @@ console.log("hi");
                 }
               )
             }
+
           </tbody>
         </table>
       </div>
