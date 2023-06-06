@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./Table.css"
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 
@@ -11,21 +11,25 @@ export default function Table() {
   const [index, setIndex] = useState()
   const [bolin, setBolin] = useState(false)
   const [errors, setError] = useState({})
- 
+  const inputRef = useRef(null);
+  const [image, setImage] = useState("");
+
   const handleChange = (e) => {
-console.log("hi");
+    console.log("hi");
     setInputdata({ ...inputdata, [e.target.name]: e.target.value })
 
   }
 
   function handleSubmit(e) {
+
+    //inputRef.current.click();
     e.preventDefault()
     setError(validation(inputdata))
   }
 
   function validation(inputdata) {
 
- let error ={}
+    let error = {}
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (inputdata.name === "") {
       error.name = "name is required!";
@@ -33,20 +37,22 @@ console.log("hi");
     else if (inputdata.age === "") {
       error.age = "Email is required!";
     }
-   else if (inputdata.city === "") {
+    else if (inputdata.city === "") {
       error.city = "Email is required!";
     }
- else if (inputdata.email === "") {
+    else if (inputdata.email === "") {
       error.email = "Email is required!";
 
     } else if (!regex.test(inputdata.email)) {
       error.email = "This is not a valid email format!";
-    
-    } else {
+
+    }   else if (inputdata.image === "") {
+      error.image = "image is required!";
+    }else {
       setArray([...array, { name, age, city, email }])
       setInputdata({ name: "", age: "", city: "", email: "" })
     }
-    return error ;
+    return error;
   }
 
   function deletedata(i) {
@@ -86,7 +92,7 @@ console.log("hi");
             onChange={handleChange} />
         </div>
 
-        {errors.name && <p style={{color:"red"}}>{errors.name}</p>}
+        {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
         <div>
           <label>Age : </label>
           <input
@@ -96,7 +102,7 @@ console.log("hi");
             placeholder='Enter Age'
             onChange={handleChange} />
         </div>
-        {errors.age && <p style={{color:"red"}}>{errors.age}</p>}
+        {errors.age && <p style={{ color: "red" }}>{errors.age}</p>}
         <div>
           <label>City : </label>
           <input
@@ -107,7 +113,7 @@ console.log("hi");
             placeholder='Enter City'
             onChange={handleChange} />
         </div>
-        {errors.city && <p style={{color:"red"}}>{errors.city}</p>}
+        {errors.city && <p style={{ color: "red" }}>{errors.city}</p>}
         <div>
           <label>E-mail : </label>
           <input
@@ -117,8 +123,28 @@ console.log("hi");
             autoComplete='off'
             placeholder='Enter E-mail'
             onChange={handleChange} />
-          {errors.email && <p style={{color:"red"}}>{errors.email}</p>}
+          {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
         </div>
+
+        <>
+          <div>
+            <div >
+            <label>Select the image : </label>
+            <input 
+                className="image-upload-button"
+                id="image-upload-input"
+                type="file"
+                ref={inputRef}
+                autoComplete='off'
+                onChange={(e) => setImage(e.target.files[0])}
+               // style={{ display: "none" }}
+                 />
+      
+            </div>
+          </div>
+        </>
+        {errors.image && <p style={{ color: "red" }}>{errors.image}</p>}
+<br></br>
         <button id="btn" onClick={!bolin ? handleSubmit : updateinfo}>{!bolin ? `Submit` : `Update`}</button>
       </div>
       <br></br>
@@ -130,6 +156,7 @@ console.log("hi");
               <td>Age</td>
               <td>City</td>
               <td>E-mail</td>
+              <td>Image</td>
             </tr>
             {
               array && array.map(
@@ -140,6 +167,10 @@ console.log("hi");
                       <td>{item.age}</td>
                       <td>{item.city}</td>
                       <td>{item.email}</td>
+                      <td>
+                      {image ? <img src={URL.createObjectURL(image)} alt="" className="img-display-after" /> : <img src="./page.png" alt="" className="img-display-after" />}
+                    
+                      </td>
                       <td>
                         <span className="actions" >
                           <BsFillPencilFill
